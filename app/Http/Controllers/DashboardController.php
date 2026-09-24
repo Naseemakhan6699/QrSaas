@@ -13,7 +13,7 @@ class DashboardController extends Controller
 {
     public function dashboard()
     {
-       return view('welcome');
+       return view('welcome_qrCode');
     }
     public function index(): View
     {

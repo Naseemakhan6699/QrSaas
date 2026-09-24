@@ -94,12 +94,22 @@
                     <form action="{{ route('qr.generate') }}" method="POST" class="space-y-5" novalidate>
                         @csrf
                         <div class="space-y-4">
-                            <div>
-                                <label for="qr_type" class="mb-2 block text-sm font-medium text-slate-200">QR Type</label>
-                                <select id="qr_type" name="qr_type" class="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3.5 text-base text-white focus:border-violet-400 focus:outline-none focus:ring-4 focus:ring-violet-500/20" aria-label="QR type">
-                                    <option value="url" {{ old('qr_type', $qr_type ?? 'url') === 'url' ? 'selected' : '' }}>Website URL</option>
-                                    <option value="business_card" {{ old('qr_type', $qr_type ?? 'url') === 'business_card' ? 'selected' : '' }}>Business Card</option>
-                                </select>
+                            <div class="grid gap-4 sm:grid-cols-2">
+                                <div>
+                                    <label for="qr_type" class="mb-2 block text-sm font-medium text-slate-200">QR Type</label>
+                                    <select id="qr_type" name="qr_type" class="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3.5 text-base text-white focus:border-violet-400 focus:outline-none focus:ring-4 focus:ring-violet-500/20" aria-label="QR type">
+                                        <option value="url" {{ old('qr_type', $qr_type ?? 'url') === 'url' ? 'selected' : '' }}>Website URL</option>
+                                        <option value="business_card" {{ old('qr_type', $qr_type ?? 'url') === 'business_card' ? 'selected' : '' }}>Business Card</option>
+                                    </select>
+                                </div>
+
+                                <div>
+                                    <label for="qr_mode" class="mb-2 block text-sm font-medium text-slate-200">QR Mode</label>
+                                    <select id="qr_mode" name="qr_mode" class="w-full rounded-2xl border border-slate-700 bg-slate-950 px-4 py-3.5 text-base text-white focus:border-violet-400 focus:outline-none focus:ring-4 focus:ring-violet-500/20" aria-label="QR mode">
+                                        <option value="dynamic" {{ old('qr_mode', Auth::check() ? 'dynamic' : 'static') === 'dynamic' ? 'selected' : '' }}>Dynamic SaaS QR</option>
+                                        <option value="static" {{ old('qr_mode', Auth::check() ? 'dynamic' : 'static') === 'static' ? 'selected' : '' }}>Static QR</option>
+                                    </select>
+                                </div>
                             </div>
 
                             <div id="website-url-group" class="{{ old('qr_type', $qr_type ?? 'url') === 'business_card' ? 'hidden' : '' }}">

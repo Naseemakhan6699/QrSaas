@@ -30,6 +30,20 @@ class QrCodeTest extends TestCase
         $response->assertSee('data:image/svg+xml;base64,');
     }
 
+    public function test_authenticated_user_can_generate_static_qr_without_saving_it(): void
+    {
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->post('/generate', [
+            'qr_mode' => 'static',
+            'url' => 'https://example.com',
+        ]);
+
+        $response->assertOk();
+        $this->assertDatabaseCount('qr_codes', 0);
+        $response->assertSee('data:image/svg+xml;base64,');
+    }
+
     public function test_user_can_generate_a_qr_code_with_custom_colors(): void
     {
         $response = $this->post('/generate', [
@@ -55,10 +69,13 @@ class QrCodeTest extends TestCase
         $response->assertSee('data:image/svg+xml;base64,');
     }
 
-    public function test_user_can_generate_a_business_card_qr_code(): void
+    public function test_user_can_generate_a_business_card_qr_code_as_dynamic_qr(): void
     {
-        $response = $this->post('/generate', [
+        $user = User::factory()->create();
+
+        $response = $this->actingAs($user)->post('/generate', [
             'qr_type' => 'business_card',
+            'qr_mode' => 'dynamic',
             'name' => 'Nain khan',
             'phone' => '+971 000000',
             'email' => 'hello@yourbrand.com',
